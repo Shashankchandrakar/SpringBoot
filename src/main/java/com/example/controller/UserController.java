@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.example.dto.User;
-import com.example.entity.CartEntity;
 import com.example.entity.UserEntity;
 import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
