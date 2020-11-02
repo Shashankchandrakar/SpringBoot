@@ -1,4 +1,4 @@
-package application;
+package com.example.entity;
 
 import lombok.Data;
 
@@ -10,7 +10,6 @@ import javax.persistence.*;
 public class ProductEntity {
 
     @Id
-  //  @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;

@@ -1,12 +1,11 @@
-package application;
+package com.example.dto;
 
 import lombok.Data;
 
 @Data
-public class Product {
+public class User {
 
     private Integer id;
     private String name;
-    private  String colour;
-
+    private Cart cart;
 }

@@ -1,10 +1,13 @@
-package application;
+package com.example.controller;
 
+import com.example.dto.User;
+import com.example.entity.CartEntity;
+import com.example.entity.UserEntity;
+import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.Optional;
 
 @RestController
@@ -45,7 +48,6 @@ public class UserController {
             User user= new User();
             user.setId(userEntity.getId());
             user.setName(userEntity.getName());
-
             return  user;
         }
         return null;

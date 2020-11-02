@@ -1,23 +1,28 @@
-package application;
+package com.example.controller;
 
+import com.example.dto.Product;
+import com.example.entity.ProductEntity;
+import com.example.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/")
 public class ProductController {
 
     private final ProductRepository productRepository;
+
     @Autowired
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
     @PostMapping("/insertProductPage")
-    public Product getProduct(@RequestBody Product product){
+    public Product getProduct(@RequestBody Product product) {
 
-        ProductEntity productEntity= new ProductEntity();
+        ProductEntity productEntity = new ProductEntity();
         productEntity.setId(product.getId());
         productEntity.setColour(product.getColour());
         productEntity.setName(product.getName());
@@ -27,17 +32,17 @@ public class ProductController {
         product.setId(productEntity.getId());
 
         return product;
-}
+    }
 
     @GetMapping("/getProductDetails")
-    public Product getProductDetails(@RequestParam(value = "id")Integer id){
+    public Product getProductDetails(@RequestParam(value = "id") Integer id) {
 
         Optional<ProductEntity> optionalProductEntity = productRepository.findById(id);
 
-        if(optionalProductEntity.isPresent()){
+        if (optionalProductEntity.isPresent()) {
             ProductEntity productEntity = optionalProductEntity.get();
 
-            Product product= new Product();
+            Product product = new Product();
             product.setId(productEntity.getId());
             product.setName(productEntity.getName());
             product.setColour(productEntity.getColour());
@@ -48,11 +53,11 @@ public class ProductController {
     }
 
     @PutMapping("/updateProductPage")
-    public Product updateProductDetails(@RequestBody Product product){
+    public Product updateProductDetails(@RequestBody Product product) {
 
         Optional<ProductEntity> optionalProductEntity = productRepository.findById(product.getId());
 
-        if(optionalProductEntity.isPresent()){
+        if (optionalProductEntity.isPresent()) {
             ProductEntity productEntity = optionalProductEntity.get();
             productEntity.setName(product.getName());
             productEntity.setColour(product.getColour());
@@ -63,9 +68,10 @@ public class ProductController {
         }
         return null;
     }
-    @DeleteMapping("/deleteProduct")
-    public void deleteProductDetails(@RequestParam(value = "id") Integer id){
 
-        if(productRepository.existsById(id)) productRepository.deleteById(id);
+    @DeleteMapping("/deleteProduct")
+    public void deleteProductDetails(@RequestParam(value = "id") Integer id) {
+
+        if (productRepository.existsById(id)) productRepository.deleteById(id);
     }
 }

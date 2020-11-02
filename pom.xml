@@ -17,7 +17,7 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
-        <dependency>  <!--dependency for adding annotations( as rest controller/ getmapping etc) -->
+        <dependency>  <!--dependency for adding annotations( as rest com.example.application.controller/ getmapping etc) -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.3.3.RELEASE</version>
