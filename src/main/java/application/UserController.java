@@ -1,14 +1,22 @@
 package application;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
+
+import javax.swing.text.html.parser.Entity;
+import java.util.Optional;
 
 @RestController
 public class UserController {
 
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
+    /*@Autowired
+    /*public UserController(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }*/
     @Autowired
-    public UserController(UserRepository userRepository){
+    public void setUserRepository(UserRepository userRepository){
         this.userRepository = userRepository;
     }
 
@@ -21,6 +29,58 @@ public class UserController {
 
         userRepository.save(userEntity);
 
+        user.setId(userEntity.getId());
+
         return  user;
+    }
+
+    @GetMapping ("/getUser")
+    public User getUserId(@RequestParam(value="id")Integer id){
+
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
+
+        if(optionalUserEntity.isPresent()){
+            UserEntity userEntity = optionalUserEntity.get();
+
+            User user= new User();
+            user.setId(userEntity.getId());
+            user.setName(userEntity.getName());
+
+            return  user;
+        }
+        return null;
+    }
+
+    @PutMapping("/updateUser")
+    public User updateUser(@Nullable @RequestBody User user){
+
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(user.getId());
+
+        if(optionalUserEntity.isPresent()){
+            UserEntity userEntity = optionalUserEntity.get();
+
+            userEntity.setName(user.getName());
+
+            userRepository.save(userEntity);
+
+            user.setName(userEntity.getName());
+
+            return user;
+
+        }
+
+        return null;
+    }
+
+    @DeleteMapping("/deleteUser")
+    public void deleteUser(@RequestParam(value="id")Integer id){
+
+       if (userRepository.existsById(id)) {
+
+           userRepository.deleteById(id);
+
+       }
+
+
     }
 }
