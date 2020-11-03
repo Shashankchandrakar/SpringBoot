@@ -3,9 +3,12 @@ package com.example.controller;
 import com.example.dto.Product;
 import com.example.entity.ProductEntity;
 import com.example.repository.ProductRepository;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,6 +35,24 @@ public class ProductController {
         product.setId(productEntity.getId());
 
         return product;
+    }
+
+    @GetMapping("/forUserProductDetails")
+    public List<Product> getAllProducts(){
+
+        List<Product> productList = new ArrayList<>();
+
+        for(ProductEntity productEntity: productRepository.findAll()){
+            Product product = new Product();
+            product.setId(productEntity.getId());
+            product.setName(productEntity.getName());
+            product.setColour(productEntity.getColour());
+
+            productList.add(product);
+
+        }
+        return  productList;
+
     }
 
     @GetMapping("/getProductDetails")

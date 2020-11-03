@@ -2,15 +2,15 @@ package com.example.controller;
 
 import com.example.dto.Cart;
 import com.example.dto.Product;
+import com.example.dto.UserProduct;
 import com.example.entity.CartEntity;
 import com.example.entity.CartProductEntity;
 import com.example.entity.ProductEntity;
 import com.example.entity.UserEntity;
+import com.example.repository.ProductRepository;
 import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +21,12 @@ import java.util.Optional;
 public class CartController {
 
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public CartController(UserRepository userRepository) {
+    public CartController(UserRepository userRepository, ProductRepository productRepository) {
         this.userRepository = userRepository;
+        this.productRepository = productRepository;
     }
 
     @GetMapping("/cartPage")
@@ -55,5 +57,32 @@ public class CartController {
         cart.setProduct(productList);
         return cart;
     }
+
+    @PostMapping("/userCartDetails")
+    public Product getProduct(@RequestBody UserProduct userProduct) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(userProduct.getUserId());
+        if(!optionalUserEntity.isPresent())
+            return null;
+        Optional<ProductEntity> optionalProductEntity = productRepository.findById(userProduct.getProductId());
+        if(!optionalProductEntity.isPresent())
+            return null;
+
+        CartEntity cartEntity = optionalUserEntity.get().getCartEntity();
+
+        CartProductEntity cartProductEntity = new CartProductEntity();
+        cartProductEntity.setCart(cartEntity);
+        cartProductEntity.setProductEntity(optionalProductEntity.get());
+        cartEntity.getProductEntityList().add(cartProductEntity);
+
+        userRepository.save(optionalUserEntity.get());
+
+        Product product = new Product();
+        product.setId(optionalProductEntity.get().getId());
+        product.setColour(optionalProductEntity.get().getColour());
+        product.setName(optionalProductEntity.get().getName());
+
+        return product;
+    }
+
 
 }
