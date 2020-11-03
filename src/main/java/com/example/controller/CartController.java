@@ -7,6 +7,7 @@ import com.example.entity.CartEntity;
 import com.example.entity.CartProductEntity;
 import com.example.entity.ProductEntity;
 import com.example.entity.UserEntity;
+import com.example.repository.CartRepository;
 import com.example.repository.ProductRepository;
 import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,13 @@ public class CartController {
 
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final CartRepository cartRepository;
 
     @Autowired
-    public CartController(UserRepository userRepository, ProductRepository productRepository) {
+    public CartController(UserRepository userRepository, ProductRepository productRepository, CartRepository cartRepository) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
+        this.cartRepository = cartRepository;
     }
 
     @GetMapping("/cartPage")
@@ -74,6 +77,7 @@ public class CartController {
         cartProductEntity.setProductEntity(optionalProductEntity.get());
         cartEntity.getProductEntityList().add(cartProductEntity);
 
+        cartRepository.save(cartEntity);
         userRepository.save(optionalUserEntity.get());
 
         Product product = new Product();
