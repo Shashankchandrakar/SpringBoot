@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -95,20 +96,36 @@ public class CartController {
     }
 
     @DeleteMapping("/deleteCartItem")
-    public void deleteCartDetails(@RequestParam (value = "id") Integer id){
+    public void deleteCartDetails(@RequestParam (value = "userId") Integer userId,@RequestParam(value = "productId") Integer productId){
 
-        if(cartProductRepository.existsById(id)) {
-            cartProductRepository.deleteById(id);
+        Optional<UserEntity> optionalCartProductEntity = userRepository.findById(userId);
+        if(!optionalCartProductEntity.isPresent()){
+            return;
+        }
+        UserEntity userEntity = optionalCartProductEntity.get();
+        CartEntity cartEntity = userEntity.getCartEntity();
+        for(CartProductEntity cartProductEntity:cartEntity.getProductEntityList()){
+            ProductEntity productEntity = cartProductEntity.getProductEntity();
+            if(Objects.equals(productEntity.getId(),productId)){
+                cartProductRepository.delete(cartProductEntity);
+            }
         }
     }
 
     @GetMapping("/userCheckout")
-    public Double getCheckoutDetails(@RequestParam (value = "id") Integer id){
-            double price = 0;
-        Optional<CartProductEntity> optionalCartProductEntity = cartProductRepository.findById(id);
-        if(optionalCartProductEntity.isPresent()){
-            ProductEntity productEntity = optionalCartProductEntity.get().getProductEntity();
-           price = productEntity.getPrice();
+    public Double getCheckoutDetails(@RequestParam (value = "userId") Integer userId){
+        double price = 0;
+        Optional<UserEntity> optionalCartProductEntity = userRepository.findById(userId);
+        if(!optionalCartProductEntity.isPresent()){
+            return price;
+        }
+        UserEntity userEntity = optionalCartProductEntity.get();
+        CartEntity cartEntity = userEntity.getCartEntity();
+        for(CartProductEntity cartProductEntity:cartEntity.getProductEntityList()){
+            ProductEntity productEntity = cartProductEntity.getProductEntity();
+            if(Objects.nonNull(productEntity.getPrice())){
+                price += productEntity.getPrice();
+            }
         }
         return price;
     }
