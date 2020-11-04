@@ -8,4 +8,5 @@ public class Product {
     private Integer id;
     private String name;
     private String colour;
+    private Double price;
 }

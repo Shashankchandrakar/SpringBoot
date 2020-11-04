@@ -29,6 +29,7 @@ public class ProductController {
         productEntity.setId(product.getId());
         productEntity.setColour(product.getColour());
         productEntity.setName(product.getName());
+        productEntity.setPrice(product.getPrice());
 
         productRepository.save(productEntity);
 
@@ -47,6 +48,7 @@ public class ProductController {
             product.setId(productEntity.getId());
             product.setName(productEntity.getName());
             product.setColour(productEntity.getColour());
+            product.setPrice(productEntity.getPrice());
 
             productList.add(product);
 
@@ -67,6 +69,7 @@ public class ProductController {
             product.setId(productEntity.getId());
             product.setName(productEntity.getName());
             product.setColour(productEntity.getColour());
+            product.setPrice(productEntity.getPrice());
 
             return product;
         }
@@ -82,6 +85,7 @@ public class ProductController {
             ProductEntity productEntity = optionalProductEntity.get();
             productEntity.setName(product.getName());
             productEntity.setColour(product.getColour());
+            productEntity.setPrice(product.getPrice());
 
             productRepository.save(productEntity);
 

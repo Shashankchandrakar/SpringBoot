@@ -7,6 +7,7 @@ import com.example.entity.CartEntity;
 import com.example.entity.CartProductEntity;
 import com.example.entity.ProductEntity;
 import com.example.entity.UserEntity;
+import com.example.repository.CartProductRepository;
 import com.example.repository.CartRepository;
 import com.example.repository.ProductRepository;
 import com.example.repository.UserRepository;
@@ -24,12 +25,14 @@ public class CartController {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final CartRepository cartRepository;
+    private final CartProductRepository cartProductRepository;
 
     @Autowired
-    public CartController(UserRepository userRepository, ProductRepository productRepository, CartRepository cartRepository) {
+    public CartController(UserRepository userRepository, ProductRepository productRepository, CartRepository cartRepository, CartProductRepository cartProductRepository) {
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.cartRepository = cartRepository;
+        this.cartProductRepository = cartProductRepository;
     }
 
     @GetMapping("/cartPage")
@@ -52,6 +55,7 @@ public class CartController {
             product.setId(productEntity.getId());
             product.setColour(productEntity.getColour());
             product.setName(productEntity.getName());
+            product.setPrice(productEntity.getPrice());
 
             productList.add(product);
         }
@@ -77,6 +81,7 @@ public class CartController {
         cartProductEntity.setProductEntity(optionalProductEntity.get());
         cartEntity.getProductEntityList().add(cartProductEntity);
 
+        cartProductRepository.save(cartProductEntity);
         cartRepository.save(cartEntity);
         userRepository.save(optionalUserEntity.get());
 
@@ -84,8 +89,28 @@ public class CartController {
         product.setId(optionalProductEntity.get().getId());
         product.setColour(optionalProductEntity.get().getColour());
         product.setName(optionalProductEntity.get().getName());
+        product.setPrice(optionalProductEntity.get().getPrice());
 
         return product;
+    }
+
+    @DeleteMapping("/deleteCartItem")
+    public void deleteCartDetails(@RequestParam (value = "id") Integer id){
+
+        if(cartProductRepository.existsById(id)) {
+            cartProductRepository.deleteById(id);
+        }
+    }
+
+    @GetMapping("/userCheckout")
+    public Double getCheckoutDetails(@RequestParam (value = "id") Integer id){
+            double price = 0;
+        Optional<CartProductEntity> optionalCartProductEntity = cartProductRepository.findById(id);
+        if(optionalCartProductEntity.isPresent()){
+            ProductEntity productEntity = optionalCartProductEntity.get().getProductEntity();
+           price = productEntity.getPrice();
+        }
+        return price;
     }
 
 
