@@ -22,21 +22,7 @@ public class ProductController {
         this.productRepository = productRepository;
     }
 
-    @PostMapping("/insertProductPage")
-    public Product getProduct(@RequestBody Product product) {
 
-        ProductEntity productEntity = new ProductEntity();
-        productEntity.setId(product.getId());
-        productEntity.setColour(product.getColour());
-        productEntity.setName(product.getName());
-        productEntity.setPrice(product.getPrice());
-
-        productRepository.save(productEntity);
-
-        product.setId(productEntity.getId());
-
-        return product;
-    }
 
     @GetMapping("/forUserProductDetails")
     public List<Product> getAllProducts(){
@@ -94,9 +80,9 @@ public class ProductController {
         return null;
     }
 
-    @DeleteMapping("/deleteProduct")
+   /* @DeleteMapping("/deleteProduct")
     public void deleteProductDetails(@RequestParam(value = "id") Integer id) {
 
         if (productRepository.existsById(id)) productRepository.deleteById(id);
-    }
+    }*/
 }

@@ -98,11 +98,11 @@ public class CartController {
     @DeleteMapping("/deleteCartItem")
     public void deleteCartDetails(@RequestParam (value = "userId") Integer userId,@RequestParam(value = "productId") Integer productId){
 
-        Optional<UserEntity> optionalCartProductEntity = userRepository.findById(userId);
-        if(!optionalCartProductEntity.isPresent()){
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+        if(!optionalUserEntity.isPresent()){
             return;
         }
-        UserEntity userEntity = optionalCartProductEntity.get();
+        UserEntity userEntity = optionalUserEntity.get();
         CartEntity cartEntity = userEntity.getCartEntity();
         for(CartProductEntity cartProductEntity:cartEntity.getProductEntityList()){
             ProductEntity productEntity = cartProductEntity.getProductEntity();
@@ -115,11 +115,11 @@ public class CartController {
     @GetMapping("/userCheckout")
     public Double getCheckoutDetails(@RequestParam (value = "userId") Integer userId){
         double price = 0;
-        Optional<UserEntity> optionalCartProductEntity = userRepository.findById(userId);
-        if(!optionalCartProductEntity.isPresent()){
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+        if(!optionalUserEntity.isPresent()){
             return price;
         }
-        UserEntity userEntity = optionalCartProductEntity.get();
+        UserEntity userEntity = optionalUserEntity.get();
         CartEntity cartEntity = userEntity.getCartEntity();
         for(CartProductEntity cartProductEntity:cartEntity.getProductEntityList()){
             ProductEntity productEntity = cartProductEntity.getProductEntity();

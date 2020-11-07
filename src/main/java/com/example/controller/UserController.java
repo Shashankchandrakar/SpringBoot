@@ -28,6 +28,7 @@ public class UserController {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(user.getId());
         userEntity.setName(user.getName());
+        userEntity.setUserRole(user.getUserRole());
 
         userRepository.save(userEntity);
 
@@ -47,6 +48,7 @@ public class UserController {
             User user= new User();
             user.setId(userEntity.getId());
             user.setName(userEntity.getName());
+            user.setUserRole(userEntity.getUserRole());
             return  user;
         }
         return null;
