@@ -49,14 +49,16 @@ public class AdminController {
     }
 
      @DeleteMapping("/deleteProduct")
-        public void deleteProductDetails(@RequestParam(value = "id") Integer userId,
+        public void deleteProductDetails(@RequestParam(value = "userId") Integer userId,
                                          @RequestParam(value = "id") Integer id) {
          Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
-
+         System.out.println(userId);
+         System.out.println(id);
          if (optionalUserEntity.isPresent()) {
-
+             System.out.println(userId);
              String check = optionalUserEntity.get().getUserRole();
              if (Objects.equals(check, "admin")) {
+                 System.out.println(id);
                  if (productRepository.existsById(id)) productRepository.deleteById(id);
              }
          }
