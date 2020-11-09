@@ -80,7 +80,7 @@ public class ProductController {
         return null;
     }
 
-   /* @DeleteMapping("/deleteProduct")
+  /*  @DeleteMapping("/deleteProduct")
     public void deleteProductDetails(@RequestParam(value = "id") Integer id) {
 
         if (productRepository.existsById(id)) productRepository.deleteById(id);
