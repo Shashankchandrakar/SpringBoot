@@ -62,7 +62,7 @@ public class ProductController {
         return null;
     }
 
-    @PutMapping("/updateProductPage")
+    /*@PutMapping("/updateProductPage")
     public Product updateProductDetails(@RequestBody Product product) {
 
         Optional<ProductEntity> optionalProductEntity = productRepository.findById(product.getId());
@@ -80,7 +80,7 @@ public class ProductController {
         return null;
     }
 
-  /*  @DeleteMapping("/deleteProduct")
+   @DeleteMapping("/deleteProduct")
     public void deleteProductDetails(@RequestParam(value = "id") Integer id) {
 
         if (productRepository.existsById(id)) productRepository.deleteById(id);
