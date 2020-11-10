@@ -14,7 +14,9 @@ public class UserEntity {
     private Integer id;
 
     private String name;
-    private String userRole;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
 
     @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private CartEntity cartEntity = new CartEntity();

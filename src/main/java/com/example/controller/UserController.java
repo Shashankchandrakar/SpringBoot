@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.dto.User;
 import com.example.entity.UserEntity;
+import com.example.entity.UserRole;
 import com.example.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -28,7 +29,7 @@ public class UserController {
         UserEntity userEntity = new UserEntity();
         userEntity.setId(user.getId());
         userEntity.setName(user.getName());
-        userEntity.setUserRole(user.getUserRole());
+        userEntity.setUserRole(UserRole.valueOf(user.getUserRole()));
 
         userRepository.save(userEntity);
 
@@ -48,7 +49,7 @@ public class UserController {
             User user= new User();
             user.setId(userEntity.getId());
             user.setName(userEntity.getName());
-            user.setUserRole(userEntity.getUserRole());
+            user.setUserRole(String.valueOf(userEntity.getUserRole()));
             return  user;
         }
         return null;

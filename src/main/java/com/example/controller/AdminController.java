@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.example.entity.UserRole.ADMIN;
+
 @RestController
 public class AdminController {
 
@@ -29,7 +31,7 @@ public class AdminController {
         Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
 
         if (optionalUserEntity.isPresent() &&
-                Objects.equals(optionalUserEntity.get().getUserRole(), "admin")) {
+                Objects.equals(optionalUserEntity.get().getUserRole(), ADMIN)) {
             Optional<ProductEntity> optionalProductEntity = productRepository.findById(product.getId());
 
             if (optionalProductEntity.isPresent()) {
@@ -53,25 +55,35 @@ public class AdminController {
     public Product updateProductDetails(@RequestParam(value = "id") Integer id,
                                         @RequestBody Product product) {
         Optional<ProductEntity> optionalProductEntity = productRepository.findById(product.getId());
+        Optional<UserEntity> userEntityOptional = userRepository.findById(id);
 
-        if (optionalProductEntity.isPresent()) {
-            ProductEntity productEntity = optionalProductEntity.get();
-            if(Objects.nonNull(product.getName())){
-                productEntity.setName(product.getName());
-            }
-            if(Objects.nonNull(product.getColour())){
-                productEntity.setColour(product.getColour());
-            }
-
-            if(Objects.nonNull(product.getPrice())){
-                productEntity.setPrice(product.getPrice());
-            }
-
-            productRepository.save(productEntity);
-
-            return product;
+        if(!userEntityOptional.isPresent()){
+            return null;
         }
-        return null;
+
+        if(!userEntityOptional.get().getUserRole().equals(ADMIN)){
+            return null;
+        }
+
+        if (!optionalProductEntity.isPresent()) {
+            return null;
+        }
+        ProductEntity productEntity = optionalProductEntity.get();
+        if (Objects.nonNull(product.getName())) {
+            productEntity.setName(product.getName());
+        }
+        if (Objects.nonNull(product.getColour())) {
+            productEntity.setColour(product.getColour());
+        }
+
+        if (Objects.nonNull(product.getPrice())) {
+            productEntity.setPrice(product.getPrice());
+        }
+
+        productRepository.save(productEntity);
+
+        return product;
+
     }
 
     @DeleteMapping("/deleteProduct")
@@ -82,7 +94,7 @@ public class AdminController {
         System.out.println(id);
         if (optionalUserEntity.isPresent()) {
             System.out.println(userId);
-            if (Objects.equals(optionalUserEntity.get().getUserRole(), "admin")) {
+            if (Objects.equals(optionalUserEntity.get().getUserRole(), ADMIN)) {
                 System.out.println(id);
                 if (productRepository.existsById(id)) productRepository.deleteById(id);
             }
