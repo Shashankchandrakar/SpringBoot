@@ -14,22 +14,22 @@ import java.util.Optional;
 @RestController
 public class AdminController {
 
-    private UserRepository userRepository;
-    private ProductRepository productRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public AdminController(ProductRepository productRepository, UserRepository userRepository){
-        this.userRepository=userRepository;
-        this.productRepository=productRepository;
+    public AdminController(ProductRepository productRepository, UserRepository userRepository) {
+        this.userRepository = userRepository;
+        this.productRepository = productRepository;
     }
 
     @PostMapping("/insertProductPage")
-    public Product getProduct(@RequestParam (value = "id") Integer id, @RequestBody Product product) {
+    public Product getProduct(@RequestParam(value = "id") Integer id, @RequestBody Product product) {
 
         Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
 
-        if(optionalUserEntity.isPresent() &&
-                Objects.equals(optionalUserEntity.get().getUserRole(), "admin")){
+        if (optionalUserEntity.isPresent() &&
+                Objects.equals(optionalUserEntity.get().getUserRole(), "admin")) {
             Optional<ProductEntity> optionalProductEntity = productRepository.findById(product.getId());
 
             if (optionalProductEntity.isPresent()) {
@@ -49,42 +49,43 @@ public class AdminController {
         return null;
     }
 
-        @PutMapping("/updateProductPage")
-         public Product updateProductDetails(@RequestParam(value = "id") Integer id,
-                                             @RequestBody Product product) {
-            Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
-            if(optionalUserEntity.isPresent()){
+    @PutMapping("/updateProductPage")
+    public Product updateProductDetails(@RequestParam(value = "id") Integer id,
+                                        @RequestBody Product product) {
+        Optional<ProductEntity> optionalProductEntity = productRepository.findById(product.getId());
 
-            }
-            Optional<ProductEntity> optionalProductEntity = productRepository.findById(product.getId());
-
-             if (optionalProductEntity.isPresent()) {
+        if (optionalProductEntity.isPresent()) {
             ProductEntity productEntity = optionalProductEntity.get();
-            productEntity.setName(product.getName());
-            productEntity.setColour(product.getColour());
-            productEntity.setPrice(product.getPrice());
+            if(Objects.nonNull(product.getName())){
+                productEntity.setName(product.getName());
+            }
+            if(Objects.nonNull(product.getColour())){
+                productEntity.setColour(product.getColour());
+            }
+
+            if(Objects.nonNull(product.getPrice())){
+                productEntity.setPrice(product.getPrice());
+            }
 
             productRepository.save(productEntity);
 
             return product;
-             }
-             return null;
-         }
+        }
+        return null;
+    }
 
-     @DeleteMapping("/deleteProduct")
-        public void deleteProductDetails(@RequestParam(value = "userId") Integer userId,
-                                         @RequestParam(value = "id") Integer id) {
-         Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
-         System.out.println(userId);
-         System.out.println(id);
-         if (optionalUserEntity.isPresent()) {
-             System.out.println(userId);
-             if (Objects.equals(optionalUserEntity.get().getUserRole(), "admin")) {
-                 System.out.println(id);
-                 if (productRepository.existsById(id)) productRepository.deleteById(id);
-             }
-         }
-         else
-             return;
-     }
+    @DeleteMapping("/deleteProduct")
+    public void deleteProductDetails(@RequestParam(value = "userId") Integer userId,
+                                     @RequestParam(value = "id") Integer id) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findById(userId);
+        System.out.println(userId);
+        System.out.println(id);
+        if (optionalUserEntity.isPresent()) {
+            System.out.println(userId);
+            if (Objects.equals(optionalUserEntity.get().getUserRole(), "admin")) {
+                System.out.println(id);
+                if (productRepository.existsById(id)) productRepository.deleteById(id);
+            }
+        }
+    }
 }
