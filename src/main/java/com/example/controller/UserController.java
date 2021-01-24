@@ -14,17 +14,18 @@ import java.util.Optional;
 public class UserController {
 
     private UserRepository userRepository;
+
     /*@Autowired
     /*public UserController(UserRepository userRepository){
         this.userRepository = userRepository;
     }*/
     @Autowired
-    public void setUserRepository(UserRepository userRepository){
+    public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @PostMapping ("/userPage")
-    public User getUser(@RequestBody User user){
+    @PostMapping("/userPage")
+    public User getUser(@RequestBody User user) {
 
         UserEntity userEntity = new UserEntity();
         userEntity.setId(user.getId());
@@ -35,32 +36,32 @@ public class UserController {
 
         user.setId(userEntity.getId());
 
-        return  user;
+        return user;
     }
 
-    @GetMapping ("/getUser")
-    public User getUserId(@RequestParam(value="id")Integer id){
+    @GetMapping("/getUser")
+    public User getUserId(@RequestParam(value = "id") Integer id) {
 
         Optional<UserEntity> optionalUserEntity = userRepository.findById(id);
 
-        if(optionalUserEntity.isPresent()){
+        if (optionalUserEntity.isPresent()) {
             UserEntity userEntity = optionalUserEntity.get();
 
-            User user= new User();
+            User user = new User();
             user.setId(userEntity.getId());
             user.setName(userEntity.getName());
             user.setUserRole(userEntity.getUserRole());
-            return  user;
+            return user;
         }
         return null;
     }
 
     @PutMapping("/updateUser")
-    public User updateUser(@Nullable @RequestBody User user){
+    public User updateUser(@RequestBody User user) {
 
         Optional<UserEntity> optionalUserEntity = userRepository.findById(user.getId());
 
-        if(optionalUserEntity.isPresent()){
+        if (optionalUserEntity.isPresent()) {
             UserEntity userEntity = optionalUserEntity.get();
 
             userEntity.setName(user.getName());
@@ -77,14 +78,11 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteUser")
-    public void deleteUser(@RequestParam(value="id")Integer id){
+    public void deleteUser(@RequestParam(value = "id") Integer id) {
 
-       if (userRepository.existsById(id)) {
-
-           userRepository.deleteById(id);
-
-       }
-
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+        }
 
     }
 }

@@ -40,14 +40,11 @@ spring-boot-logging.log
 *~
 .#*
 .*.md.html
-.DS_Store
 .attach_pid*
-.classpath
 .factorypath
 .gradle
 .idea
 .metadata
-.project
 .recommenders
 .settings
 .springBeans
